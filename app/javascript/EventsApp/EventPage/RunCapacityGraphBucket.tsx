@@ -34,11 +34,10 @@ function describeCapacity(
 
   const displayCount = signupCount > bucket.total_slots ? bucket.total_slots : signupCount;
 
-  return t(
-    'events.runCapacity.slotRemainingCount',
-    '{{ filledCount }} of {{ count }} slots filled',
-    { count: bucket.total_slots, filledCount: displayCount },
-  );
+  return t('events.runCapacity.slotRemainingCount', '{{ filledCount }} of {{ count }} slots filled', {
+    count: bucket.total_slots,
+    filledCount: displayCount,
+  });
 }
 
 export type RunCapacityGraphBucketProps = {
@@ -62,7 +61,7 @@ function RunCapacityGraphBucket({
   }
 
   const signupCount = signupCountData.sumSignupCounts({
-    state: SignupState.Confirmed,
+    state: [SignupState.Confirmed, SignupState.TicketPurchaseHold],
     bucket_key: bucket.key,
   });
   const remainingCapacity = (bucket.total_slots ?? 0) - signupCount;

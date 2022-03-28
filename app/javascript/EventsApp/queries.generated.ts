@@ -6,7 +6,7 @@ import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type CommonConventionDataFragment = { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null }> };
 
-export type RunBasicSignupDataFragment = { __typename: 'Run', id: string, signup_count_by_state_and_bucket_key_and_counted: string, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }> };
+export type RunBasicSignupDataFragment = { __typename: 'Run', id: string, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState }>, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }> };
 
 export type CommonConventionDataQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -37,7 +37,12 @@ export const CommonConventionDataFragmentDoc = gql`
 export const RunBasicSignupDataFragmentDoc = gql`
     fragment RunBasicSignupData on Run {
   id
-  signup_count_by_state_and_bucket_key_and_counted
+  grouped_signup_counts {
+    bucket_key
+    count
+    counted
+    state
+  }
   my_signups {
     id
     state

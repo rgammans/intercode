@@ -2512,6 +2512,14 @@ export enum FormType {
   UserConProfile = 'user_con_profile'
 }
 
+export type GroupedSignupCount = {
+  __typename: 'GroupedSignupCount';
+  bucket_key?: Maybe<Scalars['String']>;
+  count: Scalars['Int'];
+  counted: Scalars['Boolean'];
+  state: SignupState;
+};
+
 export type LiquidAssign = {
   __typename: 'LiquidAssign';
   cms_variable_value_json?: Maybe<Scalars['String']>;
@@ -4173,6 +4181,7 @@ export type Run = {
   current_ability_can_signup_summary_run: Scalars['Boolean'];
   ends_at: Scalars['Date'];
   event: Event;
+  grouped_signup_counts: Array<GroupedSignupCount>;
   id: Scalars['ID'];
   my_signup_requests: Array<SignupRequest>;
   my_signups: Array<Signup>;
@@ -4182,6 +4191,7 @@ export type Run = {
   rooms: Array<Room>;
   schedule_note?: Maybe<Scalars['String']>;
   signup_changes_paginated: SignupChangesPagination;
+  /** @deprecated Please use grouped_signup_counts instead */
   signup_count_by_state_and_bucket_key_and_counted: Scalars['Json'];
   signups_paginated: SignupsPagination;
   starts_at: Scalars['Date'];
@@ -4297,6 +4307,7 @@ export type Signup = {
   choice?: Maybe<Scalars['Int']>;
   counted: Scalars['Boolean'];
   created_at: Scalars['Date'];
+  expires_at?: Maybe<Scalars['Date']>;
   id: Scalars['ID'];
   requested_bucket_key?: Maybe<Scalars['String']>;
   run: Run;
