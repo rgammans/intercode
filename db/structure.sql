@@ -1959,7 +1959,8 @@ CREATE TABLE public.order_entries (
     price_per_item_cents integer,
     price_per_item_currency character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    run_id bigint
 );
 
 
@@ -2679,7 +2680,7 @@ CREATE TABLE public.tickets (
     updated_at timestamp without time zone NOT NULL,
     provided_by_event_id integer,
     order_entry_id bigint,
-    event_id bigint
+    run_id bigint
 );
 
 
@@ -4323,6 +4324,13 @@ CREATE INDEX index_order_entries_on_product_variant_id ON public.order_entries U
 
 
 --
+-- Name: index_order_entries_on_run_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_order_entries_on_run_id ON public.order_entries USING btree (run_id);
+
+
+--
 -- Name: index_orders_on_user_con_profile_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4652,13 +4660,6 @@ CREATE INDEX index_ticket_types_on_event_id ON public.ticket_types USING btree (
 
 
 --
--- Name: index_tickets_on_event_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_tickets_on_event_id ON public.tickets USING btree (event_id);
-
-
---
 -- Name: index_tickets_on_order_entry_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4670,6 +4671,13 @@ CREATE INDEX index_tickets_on_order_entry_id ON public.tickets USING btree (orde
 --
 
 CREATE INDEX index_tickets_on_provided_by_event_id ON public.tickets USING btree (provided_by_event_id);
+
+
+--
+-- Name: index_tickets_on_run_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tickets_on_run_id ON public.tickets USING btree (run_id);
 
 
 --
@@ -4747,6 +4755,14 @@ CREATE TRIGGER tsvector_update_event_title BEFORE INSERT OR UPDATE ON public.eve
 --
 
 CREATE TRIGGER tsvector_update_pg_search_documents_content BEFORE INSERT OR UPDATE ON public.pg_search_documents FOR EACH ROW EXECUTE FUNCTION tsvector_update_trigger('content_vector', 'public.english_unaccent', 'content');
+
+
+--
+-- Name: tickets fk_rails_001fceb18b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tickets
+    ADD CONSTRAINT fk_rails_001fceb18b FOREIGN KEY (run_id) REFERENCES public.runs(id);
 
 
 --
@@ -4966,14 +4982,6 @@ ALTER TABLE ONLY public.signup_requests
 
 
 --
--- Name: tickets fk_rails_4def87ea62; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.tickets
-    ADD CONSTRAINT fk_rails_4def87ea62 FOREIGN KEY (event_id) REFERENCES public.events(id);
-
-
---
 -- Name: cms_content_group_associations fk_rails_4facd81f7c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4987,6 +4995,14 @@ ALTER TABLE ONLY public.cms_content_group_associations
 
 ALTER TABLE ONLY public.root_sites
     ADD CONSTRAINT fk_rails_5cb3c6880e FOREIGN KEY (default_layout_id) REFERENCES public.cms_layouts(id);
+
+
+--
+-- Name: order_entries fk_rails_61f5248ed3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.order_entries
+    ADD CONSTRAINT fk_rails_61f5248ed3 FOREIGN KEY (run_id) REFERENCES public.runs(id);
 
 
 --
@@ -5714,6 +5730,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220122174528'),
 ('20220226170101'),
 ('20220226170448'),
-('20220313171517');
+('20220313171517'),
+('20220328152526'),
+('20220328155131');
 
 

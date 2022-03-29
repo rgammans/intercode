@@ -3509,6 +3509,7 @@ export type OrderEntry = {
   product: Product;
   product_variant?: Maybe<ProductVariant>;
   quantity: Scalars['Int'];
+  run?: Maybe<Run>;
 };
 
 export type OrderEntryInput = {
@@ -3516,6 +3517,7 @@ export type OrderEntryInput = {
   productId?: InputMaybe<Scalars['ID']>;
   productVariantId?: InputMaybe<Scalars['ID']>;
   quantity?: InputMaybe<Scalars['Int']>;
+  runId?: InputMaybe<Scalars['ID']>;
   ticketId?: InputMaybe<Scalars['ID']>;
 };
 
@@ -4586,10 +4588,10 @@ export type Ticket = {
   __typename: 'Ticket';
   convention: Convention;
   created_at: Scalars['Date'];
-  event?: Maybe<Event>;
   id: Scalars['ID'];
   order_entry?: Maybe<OrderEntry>;
   provided_by_event?: Maybe<Event>;
+  run?: Maybe<Run>;
   ticket_type: TicketType;
   updated_at: Scalars['Date'];
   user_con_profile: UserConProfile;
