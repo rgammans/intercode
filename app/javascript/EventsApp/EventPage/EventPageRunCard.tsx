@@ -75,7 +75,7 @@ function EventPageRunCard({ event, run, myProfile, currentAbility }: EventPageRu
 
   const selfServiceSignup = useCallback(
     async (signupOption) => {
-      await createMySignupMutate({
+      const response = await createMySignupMutate({
         variables: {
           runId: run.id,
           requestedBucketKey: (signupOption.bucket || {}).key,
@@ -90,6 +90,7 @@ function EventPageRunCard({ event, run, myProfile, currentAbility }: EventPageRu
       });
 
       await apolloClient.resetStore();
+      return response.data?.createMySignup.signup;
     },
     [apolloClient, createMySignupMutate, event, run],
   );
